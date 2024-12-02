@@ -75,7 +75,7 @@ async function fetchAndDisplayTodos(name) {
 }
 
 async function toggleTodoChecked(name, todoId, checked) {
-  const response = await fetch("/update", {
+  const response = await fetch("/updateTodo", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, todoId, checked }),
@@ -89,8 +89,8 @@ document.getElementById("search").addEventListener("click", () => {
 });
 
 async function deleteTodoOnCheck(name, todoId) {
-  const response = await fetch("/delete", {
-    method: "DELETE",
+  const response = await fetch("/update", {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, todoId }),
   });
