@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTodo = exports.deleteTodo = exports.getTodos = exports.addTodo = void 0;
+exports.toggleTodoChecked = exports.updateTodo = exports.deleteTodo = exports.getTodos = exports.addTodo = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const addTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -99,3 +99,21 @@ const updateTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateTodo = updateTodo;
+const toggleTodoChecked = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { name, todoId, checked } = req.body;
+        if (!name || !todoId || typeof checked !== "boolean") {
+            res.status(400).json({ message: "Invalid input data" });
+        }
+        const user = yield User_1.default.findOneAndUpdate({ name, "todos._id": todoId }, { $set: { "todos.$.checked": checked } }, { new: true });
+        if (!user) {
+            res.status(404).json({ message: "User or Todo not found" });
+        }
+        res.status(200).json({ message: "Todo updated successfully", data: user });
+    }
+    catch (error) {
+        console.error("Error updating todo status:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.toggleTodoChecked = toggleTodoChecked;

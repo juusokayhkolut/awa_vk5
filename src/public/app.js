@@ -44,6 +44,14 @@ async function fetchAndDisplayTodos(name) {
       checkbox.checked = todo.checked;
       checkbox.classList.add("filled-in", "checkBoxes");
 
+      checkbox.onclick = async () => {
+        const updateResponse = await toggleTodoChecked(name, todo._id, checkbox.checked);
+        if (!updateResponse.ok) {
+          alert("Failed to update todo status!");
+          checkbox.checked = !checkbox.checked;
+        }
+      };
+
       const todoText = document.createElement("span");
       todoText.textContent = todo.todo;
 
@@ -71,6 +79,15 @@ async function fetchAndDisplayTodos(name) {
     alert("Failed to fetch todos!");
     console.error(response.error);
   }
+}
+
+async function toggleTodoChecked(name, todoId, checked) {
+  const response = await fetch("/toggle-checked", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, todoId, checked }),
+  });
+  return response;
 }
 
 document.getElementById("search").addEventListener("click", () => {

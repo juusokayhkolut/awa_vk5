@@ -9,5 +9,6 @@ const router = express_1.default.Router();
 router.post("/add", todoController_1.addTodo);
 router.get("/todos", todoController_1.getTodos);
 router.put("/update", todoController_1.updateTodo);
+router.put("/toggle-checked", todoController_1.toggleTodoChecked);
 router.delete("/delete", todoController_1.deleteTodo);
 exports.default = router;

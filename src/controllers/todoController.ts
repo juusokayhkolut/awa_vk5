@@ -96,3 +96,27 @@ export const updateTodo = async (req: Request, res: Response) => {
     }
   };
   
+  export const toggleTodoChecked = async (req: Request, res: Response) => {
+    try {
+      const { name, todoId, checked } = req.body;
+  
+      if (!name || !todoId || typeof checked !== "boolean") {
+        res.status(400).json({ message: "Invalid input data" });
+      }
+  
+      const user = await User.findOneAndUpdate(
+        { name, "todos._id": todoId },
+        { $set: { "todos.$.checked": checked } },
+        { new: true }
+      );
+  
+      if (!user) {
+        res.status(404).json({ message: "User or Todo not found" });
+      }
+  
+      res.status(200).json({ message: "Todo updated successfully", data: user });
+    } catch (error) {
+      console.error("Error updating todo status:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
