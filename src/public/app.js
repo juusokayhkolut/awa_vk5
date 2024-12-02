@@ -45,16 +45,9 @@ async function fetchAndDisplayTodos(name) {
       checkbox.classList.add("filled-in");
 
       checkbox.onclick = async () => {
-        try {
-          const deleteResponse = await deleteTodoOnCheck(name, todo.id);
-
-          if (!deleteResponse.ok) throw new Error("Failed to delete todo.");
-
-          fetchAndDisplayTodos(name);
-        } catch (error) {
-          alert("Error deleting todo. Please try again.");
-          checkbox.checked = !checkbox.checked;
-        }
+        const deleteResponse = await deleteTodoOnCheck(name, todo.id)
+        if (!deleteResponse.ok) throw new Error("Failed to delete todo.");
+        fetchAndDisplayTodos(name);
       };
 
       const todoText = document.createElement("span");
