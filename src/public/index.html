@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <title>Todo App</title>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper red">
+      <a href="#" class="brand-logo center">Todo App</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="col">
+      <h5>Add Todo</h5>
+      <input id="name" type="text" placeholder="Enter your name">
+      <input id="todo" type="text" placeholder="Enter a todo">
+      <button id="addBtn" class="btn">Add</button>
+    </div>
+    <div class="col">
+      <h5>Search Todos</h5>
+      <input id="searchName" type="text" placeholder="Enter name to search">
+      <button id="searchBtn" class="btn">Search</button>
+      <ul id="todoList"></ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
