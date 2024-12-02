@@ -60,10 +60,6 @@ async function fetchAndDisplayTodos(name) {
       deleteButton.classList.add("delete-task");
       deleteButton.onclick = async () => {
         const deleteResponse = await deleteTodoOnCheck(name, todo._id);
-        if (!deleteResponse.ok) {
-          alert("Failed to delete todo!");
-          throw new Error("Failed to delete todo.");
-        }
         fetchAndDisplayTodos(name);
       };
 
@@ -82,7 +78,7 @@ async function fetchAndDisplayTodos(name) {
 }
 
 async function toggleTodoChecked(name, todoId, checked) {
-  const response = await fetch("/toggle-checked", {
+  const response = await fetch("/update", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, todoId, checked }),

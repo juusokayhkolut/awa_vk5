@@ -71,52 +71,26 @@ export const deleteTodo = async (req: Request, res: Response) => {
 };
 
 export const updateTodo = async (req: Request, res: Response) => {
-    try {
-      const { name, todoId, checked } = req.body;
-  
-      const user = await User.findOne({ name });
-      if (!user) {
-        res.status(404).json({ message: "User not found!" });
-        return;
-      }
-  
-      if (checked) {
-        user.todos = user.todos.filter((todo) => todo._id?.toString() !== todoId);
-      } else {
-        const todo = user.todos.find((t) => t._id?.toString() === todoId);
-        if (todo) {
-          todo.checked = checked;
-        }
-      }
-  
-      await user.save();
-      res.status(200).json({ message: checked ? "Todo deleted!" : "Todo updated!" });
-    } catch (error) {
-      res.status(500).json({ error: "Error" });
+  try {
+    const { name, todoId, checked } = req.body;
+
+    if (!name || !todoId || typeof checked !== "boolean") {
+      res.status(400).json({ message: "Invalid input data" });
     }
-  };
-  
-  export const toggleTodoChecked = async (req: Request, res: Response) => {
-    try {
-      const { name, todoId, checked } = req.body;
-  
-      if (!name || !todoId || typeof checked !== "boolean") {
-        res.status(400).json({ message: "Invalid input data" });
-      }
-  
-      const user = await User.findOneAndUpdate(
-        { name, "todos._id": todoId },
-        { $set: { "todos.$.checked": checked } },
-        { new: true }
-      );
-  
-      if (!user) {
-        res.status(404).json({ message: "User or Todo not found" });
-      }
-  
-      res.status(200).json({ message: "Todo updated successfully", data: user });
-    } catch (error) {
-      console.error("Error updating todo status:", error);
-      res.status(500).json({ error: "Internal server error" });
+
+    const user = await User.findOneAndUpdate(
+      { name, "todos._id": todoId },
+      { $set: { "todos.$.checked": checked } },
+      { new: true }
+    );
+
+    if (!user) {
+      res.status(404).json({ message: "User or Todo not found" });
     }
+
+    res.status(200).json({ message: "Todo updated successfully", data: user });
+  } catch (error) {
+    console.error("Error updating todo status:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
   };

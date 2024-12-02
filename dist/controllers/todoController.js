@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toggleTodoChecked = exports.updateTodo = exports.deleteTodo = exports.getTodos = exports.addTodo = void 0;
+exports.updateTodo = exports.deleteTodo = exports.getTodos = exports.addTodo = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const addTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -77,31 +77,6 @@ exports.deleteTodo = deleteTodo;
 const updateTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, todoId, checked } = req.body;
-        const user = yield User_1.default.findOne({ name });
-        if (!user) {
-            res.status(404).json({ message: "User not found!" });
-            return;
-        }
-        if (checked) {
-            user.todos = user.todos.filter((todo) => { var _a; return ((_a = todo._id) === null || _a === void 0 ? void 0 : _a.toString()) !== todoId; });
-        }
-        else {
-            const todo = user.todos.find((t) => { var _a; return ((_a = t._id) === null || _a === void 0 ? void 0 : _a.toString()) === todoId; });
-            if (todo) {
-                todo.checked = checked;
-            }
-        }
-        yield user.save();
-        res.status(200).json({ message: checked ? "Todo deleted!" : "Todo updated!" });
-    }
-    catch (error) {
-        res.status(500).json({ error: "Error" });
-    }
-});
-exports.updateTodo = updateTodo;
-const toggleTodoChecked = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { name, todoId, checked } = req.body;
         if (!name || !todoId || typeof checked !== "boolean") {
             res.status(400).json({ message: "Invalid input data" });
         }
@@ -116,4 +91,4 @@ const toggleTodoChecked = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: "Internal server error" });
     }
 });
-exports.toggleTodoChecked = toggleTodoChecked;
+exports.updateTodo = updateTodo;
