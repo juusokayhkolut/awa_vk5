@@ -65,8 +65,8 @@ async function fetchAndDisplayTodos(name) {
   }
 }
 
-document.getElementById("searchBtn").addEventListener("click", () => {
-  const name = document.getElementById("searchName").value;
+document.getElementById("search").addEventListener("click", () => {
+  const name = document.getElementById("searchInput").value;
   fetchAndDisplayTodos(name);
 });
 
