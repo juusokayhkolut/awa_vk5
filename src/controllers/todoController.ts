@@ -59,7 +59,7 @@ export const deleteTodo = async (req: Request, res: Response) => {
       }
   
       user.todos = updatedTodos;
-      user.markModified("todos"); // Ensure Mongoose detects the change
+      user.markModified("todos");
       await user.save();
   
       res.status(200).json({ message: "Todo deleted successfully", data: user });
@@ -93,4 +93,4 @@ export const updateTodo = async (req: Request, res: Response) => {
     console.error("Error updating todo status:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-  };
+};

@@ -35,8 +35,6 @@ async function fetchAndDisplayTodos(name) {
 
     todos.forEach((todo) => {
       const li = document.createElement("li");
-      li.classList.add("collection-item");
-
       const label = document.createElement("label");
 
       const checkbox = document.createElement("input");
@@ -47,7 +45,6 @@ async function fetchAndDisplayTodos(name) {
       checkbox.onclick = async () => {
         const updateResponse = await toggleTodoChecked(name, todo._id, checkbox.checked);
         if (!updateResponse.ok) {
-          alert("Failed to update todo status!");
           checkbox.checked = !checkbox.checked;
         }
       };
