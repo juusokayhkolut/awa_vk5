@@ -43,6 +43,7 @@ async function fetchAndDisplayTodos(name) {
       checkbox.type = "checkbox";
       checkbox.checked = todo.checked;
       checkbox.classList.add("filled-in");
+      checkbox.classList.add("checkBoxes");
 
       checkbox.onclick = async () => {
         const deleteResponse = await deleteTodoOnCheck(name, todo.id)
