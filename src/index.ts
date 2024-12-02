@@ -1,53 +1,27 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import mongoose from "mongoose";
 import bodyParser from "body-parser";
-
-type TUser = {
-  name: string;
-  todos: string[];
-};
+import cors from "cors";
+import path from "path";
+import todoRoutes from "./routes/todoRoutes";
 
 const app = express();
 const PORT = 3000;
 
+mongoose
+  .connect("mongodb://127.0.0.1:27017/testdb")
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Error connecting to MongoDB:", err));
+
+app.use(cors());
 app.use(bodyParser.json());
 
-const users: TUser[] = [];
+app.use(express.static(path.join(__dirname, "../src/public")));
 
-app.post("/add", (req: Request, res: Response) => {
-  const { name, todo } = req.body;
+app.use("/", todoRoutes);
 
-  if (!name || !todo) {
-    res.status(400).json({ message: "Name and Todo are required!" });
-    return;
-  }
-
-  let user = users.find((user) => user.name === name);
-
-  if (!user) {
-    user = { name, todos: [] };
-    users.push(user);
-  }
-
-  user.todos.push(todo);
-  res.status(201).json({ message: "Todo added successfully!" });
-});
-
-app.get("/todos", (req: Request, res: Response) => {
-  const { name } = req.query;
-
-  if (!name) {
-    res.status(400).json({ message: "Name is required!" });
-    return;
-  }
-
-  const user = users.find((user) => user.name === name);
-
-  if (!user) {
-    res.status(404).json({ message: "User not found!" });
-    return;
-  }
-
-  res.status(200).json(user.todos);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../src/public/index.html"));
 });
 
 app.listen(PORT, () => {

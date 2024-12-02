@@ -1,46 +1,8 @@
-async function updateOrDeleteTodo(name, todoId, checked) {
-  const response = await fetch("/update", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, todoId, checked }),
-  });
+document.getElementById("todoForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-  const result = await response.json();
-
-  if (response.ok) {
-    alert(result.message);
-    fetchAndDisplayTodos(name);
-  } else {
-    alert("Failed to update or delete todo: " + result.error);
-  }
-}
-
-async function fetchAndDisplayTodos(name) {
-  const response = await fetch(`/todos?name=${name}`);
-  const todos = await response.json();
-
-  if (response.ok) {
-    const todoList = document.getElementById("todoList");
-    todoList.innerHTML = "";
-
-    todos.forEach((todo) => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <label>
-          <input type="checkbox" class="checkBoxes" id="${todo._id}" ${todo.checked ? "checked" : ""} onchange="updateOrDeleteTodo('${name}', '${todo._id}', this.checked)">
-          <span>${todo.todo}</span>
-        </label>
-      `;
-      todoList.appendChild(li);
-    });
-  } else {
-    alert("Failed to fetch todos!");
-  }
-}
-
-document.getElementById("addBtn").addEventListener("click", async () => {
-  const name = document.getElementById("name").value;
-  const todo = document.getElementById("todo").value;
+  const name = document.getElementById("userInput").value;
+  const todo = document.getElementById("todoInput").value;
 
   if (!name || !todo) {
     alert("Name and Todo cannot be empty!");
@@ -56,12 +18,59 @@ document.getElementById("addBtn").addEventListener("click", async () => {
   const result = await response.json();
 
   if (response.ok) {
-    alert(result.message || "Todo added!");
+    document.getElementById("todoForm").reset();
     fetchAndDisplayTodos(name);
   } else {
     alert("Failed to add todo: " + result.error);
   }
 });
+
+async function fetchAndDisplayTodos(name) {
+  const response = await fetch(`/todos?name=${name}`);
+  const todos = await response.json();
+
+  if (response.ok) {
+    const todoList = document.getElementById("todoList");
+    todoList.innerHTML = "";
+
+    todos.forEach((todo) => {
+      const li = document.createElement("li");
+      li.classList.add("collection-item");
+
+      const label = document.createElement("label");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = todo.checked;
+      checkbox.classList.add("filled-in");
+
+      checkbox.onclick = async () => {
+        try {
+          const deleteResponse = await deleteTodoOnCheck(name, todo.id);
+
+          if (!deleteResponse.ok) throw new Error("Failed to delete todo.");
+
+          fetchAndDisplayTodos(name);
+        } catch (error) {
+          alert("Error deleting todo. Please try again.");
+          checkbox.checked = !checkbox.checked;
+        }
+      };
+
+      const todoText = document.createElement("span");
+      todoText.textContent = todo.todo;
+
+      label.appendChild(checkbox);
+      label.appendChild(todoText);
+
+      li.appendChild(label);
+      todoList.appendChild(li);
+    });
+  } else {
+    alert("Failed to fetch todos!");
+    console.error(response.error);
+  }
+}
 
 document.getElementById("searchBtn").addEventListener("click", () => {
   const name = document.getElementById("searchName").value;
@@ -78,7 +87,6 @@ async function deleteTodoOnCheck(name, todoId) {
   const result = await response.json();
 
   if (response.ok) {
-    alert(result.message || "Todo deleted!");
     fetchAndDisplayTodos(name);
   } else {
     alert("Failed to delete todo: " + result.error);
