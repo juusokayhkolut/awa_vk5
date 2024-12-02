@@ -42,22 +42,29 @@ async function fetchAndDisplayTodos(name) {
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = todo.checked;
-      checkbox.classList.add("filled-in");
-      checkbox.classList.add("checkBoxes");
-
-      checkbox.onclick = async () => {
-        const deleteResponse = await deleteTodoOnCheck(name, todo._id)
-        if (!deleteResponse.ok) throw new Error("Failed to delete todo.");
-        fetchAndDisplayTodos(name);
-      };
+      checkbox.classList.add("filled-in", "checkBoxes");
 
       const todoText = document.createElement("span");
       todoText.textContent = todo.todo;
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.classList.add("delete-task");
+      deleteButton.onclick = async () => {
+        const deleteResponse = await deleteTodoOnCheck(name, todo._id);
+        if (!deleteResponse.ok) {
+          alert("Failed to delete todo!");
+          throw new Error("Failed to delete todo.");
+        }
+        fetchAndDisplayTodos(name);
+      };
 
       label.appendChild(checkbox);
       label.appendChild(todoText);
 
       li.appendChild(label);
+      li.appendChild(deleteButton);
+
       todoList.appendChild(li);
     });
   } else {
