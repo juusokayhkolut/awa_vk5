@@ -14,17 +14,30 @@
   </nav>
 
   <div class="container">
-    <div class="col">
-      <h5>Add Todo</h5>
-      <input id="name" type="text" placeholder="Enter your name">
-      <input id="todo" type="text" placeholder="Enter a todo">
-      <button id="addBtn" class="btn">Add</button>
+    <div class="row">
+      <div class="col s12">
+        <h5>Add Todo</h5>
+        <form id="todoForm">
+          <div class="input-field">
+            <input id="userInput" type="text" placeholder="Enter your name" required>
+          </div>
+          <div class="input-field">
+            <input id="todoInput" type="text" placeholder="Enter a todo" required>
+          </div>
+          <button id="submit-data" type="submit" class="btn red">Add Todo</button>
+        </form>
+      </div>
     </div>
-    <div class="col">
-      <h5>Search Todos</h5>
-      <input id="searchName" type="text" placeholder="Enter name to search">
-      <button id="searchBtn" class="btn">Search</button>
-      <ul id="todoList"></ul>
+
+    <div class="row">
+      <div class="col s12">
+        <h5>Search Todos</h5>
+        <div class="input-field">
+          <input id="searchName" type="text" placeholder="Enter name to search">
+        </div>
+        <button id="searchBtn" class="btn red">Search</button>
+        <ul id="todoList" class="collection"></ul>
+      </div>
     </div>
   </div>
 
