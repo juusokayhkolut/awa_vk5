@@ -46,7 +46,7 @@ async function fetchAndDisplayTodos(name) {
       checkbox.classList.add("checkBoxes");
 
       checkbox.onclick = async () => {
-        const deleteResponse = await deleteTodoOnCheck(name, todo.id)
+        const deleteResponse = await deleteTodoOnCheck(name, todo._id)
         if (!deleteResponse.ok) throw new Error("Failed to delete todo.");
         fetchAndDisplayTodos(name);
       };

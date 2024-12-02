@@ -50,17 +50,27 @@ exports.getTodos = getTodos;
 const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, todoId } = req.body;
+        if (!name || !todoId) {
+            res.status(400).json({ message: "Missing 'name' or 'todoId'" });
+        }
         const user = yield User_1.default.findOne({ name });
         if (!user) {
-            res.status(404).json({ message: "User not found!" });
-            return;
+            res.status(404).json({ message: "User not found" });
         }
-        user.todos = user.todos.filter((todo) => { var _a; return ((_a = todo._id) === null || _a === void 0 ? void 0 : _a.toString()) !== todoId; });
-        yield user.save();
-        res.status(200).json({ message: "Todo deleted successfully!" });
+        if (user != null) {
+            const updatedTodos = user.todos.filter((todo) => { var _a; return ((_a = todo._id) === null || _a === void 0 ? void 0 : _a.toString()) !== todoId; });
+            if (updatedTodos.length === user.todos.length) {
+                res.status(404).json({ message: "Todo not found" });
+            }
+            user.todos = updatedTodos;
+            user.markModified("todos"); // Ensure Mongoose detects the change
+            yield user.save();
+            res.status(200).json({ message: "Todo deleted successfully", data: user });
+        }
     }
     catch (error) {
-        res.status(500).json({ error: "Error" });
+        console.error("Error deleting todo:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 exports.deleteTodo = deleteTodo;
