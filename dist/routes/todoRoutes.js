@@ -8,6 +8,6 @@ const todoController_1 = require("../controllers/todoController");
 const router = express_1.default.Router();
 router.post("/add", todoController_1.addTodo);
 router.get("/todos", todoController_1.getTodos);
-router.put("/update", todoController_1.updateTodo);
-router.delete("/delete", todoController_1.deleteTodo);
+router.put("/update", todoController_1.deleteTodo);
+router.put("/updateTodo", todoController_1.updateTodo);
 exports.default = router;

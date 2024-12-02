@@ -96,10 +96,4 @@ async function deleteTodoOnCheck(name, todoId) {
   });
 
   const result = await response.json();
-
-  if (response.ok) {
-    fetchAndDisplayTodos(name);
-  } else {
-    alert("Failed to delete todo: " + result.error);
-  }
 }

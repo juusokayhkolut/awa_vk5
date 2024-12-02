@@ -63,7 +63,7 @@ const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 res.status(404).json({ message: "Todo not found" });
             }
             user.todos = updatedTodos;
-            user.markModified("todos"); // Ensure Mongoose detects the change
+            user.markModified("todos");
             yield user.save();
             res.status(200).json({ message: "Todo deleted successfully", data: user });
         }
